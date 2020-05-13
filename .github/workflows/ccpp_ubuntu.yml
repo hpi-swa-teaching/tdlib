@@ -1,0 +1,40 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: apt-get update
+      run: sudo apt-get update
+    - name: apt-get upgrade
+      run: sudo apt-get upgrade
+    - name: apt-get install dependencies
+      run: sudo apt-get install make git zlib1g-dev libssl-dev gperf php cmake clang-6.0 libc++-dev libc++abi-dev
+    - name: clone tdlib
+      run: git clone https://github.com/tdlib/td.git
+    - name: checkout 1.6.0 tag #edit here in case of new tdlib release
+      working-directory: td
+      run: git checkout v1.6.0
+    - name: create build dir
+      working-directory: td
+      run: mkdir build
+    - name: export cxxflags
+      working-directory: td/build
+      run: export CXXFLAGS="-stdlib=libc++"
+    - name: run cc
+      working-directory: td/build
+      run: CC=/usr/bin/clang-6.0 CXX=/usr/bin/clang++-6.0 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DTD_ENABLE_LTO=ON -DCMAKE_AR=/usr/bin/llvm-ar-6.0 -DCMAKE_NM=/usr/bin/llvm-nm-6.0 -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump-6.0 -DCMAKE_RANLIB=/usr/bin/llvm-ranlib-6.0 ..
+    - name: cmake build
+      working-directory: td/build
+      run: cmake --build . --target install
+
+  
