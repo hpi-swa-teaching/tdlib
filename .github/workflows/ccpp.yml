@@ -21,6 +21,12 @@ jobs:
       run: git clone https://github.com/tdlib/td.git
     - name: Go to td dir
       run: cd td
+    - name: update origin
+      run: git remote update
+    - name: fetch repo
+      run: git fetch 
+    - name: sanity ls
+      run: ls
     - name: Checkout 1.6.0 tag
       run: git checkout v1.6.0
     - name: Create build dir
