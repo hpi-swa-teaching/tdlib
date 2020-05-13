@@ -1,0 +1,36 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: xcode install
+      run: xcode-select --install
+    - name: install homebrew
+      run: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    - name: Install dependencies via brew
+      run: brew install gperf cmake openssl
+    - name: Clone tdlib
+      run: git clone https://github.com/tdlib/td.git
+    - name: Go to td dir
+      run: cd td
+    - name: Checkout 1.6.0 tag
+      run: git checkout v1.6.0
+    - name: Create build dir
+      run: mkdir build
+    - name: Go to build dir
+      run: cd build
+    - name: Go to build dir
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl/ -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DTD_ENABLE_LTO=ON ..
+    - name: Go to build dir
+      run: cmake --build . --target install
+
