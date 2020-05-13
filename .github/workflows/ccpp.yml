@@ -19,22 +19,16 @@ jobs:
       run: brew install gperf cmake openssl
     - name: Clone tdlib
       run: git clone https://github.com/tdlib/td.git
-    - name: Go to td dir
-      run: cd td
-    - name: update origin
-      run: git remote update
-    - name: fetch repo
-      run: git fetch 
-    - name: sanity ls
-      run: ls
     - name: Checkout 1.6.0 tag
+      working-directory: td
       run: git checkout v1.6.0
     - name: Create build dir
+      working-directory: td
       run: mkdir build
-    - name: Go to build dir
-      run: cd build
-    - name: Go to build dir
+    - name: Run cmake
+      working-directory: td/build
       run: cmake -DCMAKE_BUILD_TYPE=Release -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl/ -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DTD_ENABLE_LTO=ON ..
-    - name: Go to build dir
+    - name: Run cmake install
+      working-directory: td/build
       run: cmake --build . --target install
 
