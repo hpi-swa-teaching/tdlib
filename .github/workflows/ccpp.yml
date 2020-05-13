@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Tdlib Max x64 Build
 
 on:
   push:
