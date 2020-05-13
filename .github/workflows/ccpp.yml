@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: xcode install
-      run: xcode-select --install
     - name: install homebrew
       run: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     - name: Install dependencies via brew
