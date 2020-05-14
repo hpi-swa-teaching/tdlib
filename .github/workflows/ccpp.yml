@@ -31,12 +31,9 @@ jobs:
     - name: Run cmake install
       working-directory: td/build
       run: cmake --build . --target install
-    - name: create release dir
-      run: mkdir release
-    - uses: montudor/action-zip@v0.1.0
-      with:
-          args: zip -qq -r ./release/vendor.zip ./td/build
-    - uses: actions/upload-artifact@master
-      with:
-          name: Mac OS Release
-          path: release
+    - name: Release
+      uses: fnkr/github-action-ghr@v1
+      env:
+        GHR_COMPRESS: xz
+        GHR_PATH: build/
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
