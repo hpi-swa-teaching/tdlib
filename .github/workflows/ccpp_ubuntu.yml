@@ -38,9 +38,12 @@ jobs:
     - name: cmake build
       working-directory: td/build
       run: cmake --build . --target install
+    - name: Remove cmake dir
+      working-directory: release/lib
+      run: rm -rf cmake
     - uses: actions/upload-artifact@master
       with:
           name: Ubuntu 18 x64 Release
-          path: release
+          path: release/lib
 
   
