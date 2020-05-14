@@ -36,5 +36,14 @@ jobs:
     - name: cmake build
       working-directory: td/build
       run: cmake --build . --target install
+    - name: create release dir
+      run: mkdir release
+    - uses: montudor/action-zip@v0.1.0
+      with:
+          args: zip -qq -r ./release/vendor.zip ./td/build
+    - uses: actions/upload-artifact@master
+      with:
+          name: Mac OS Release
+          path: release
 
   
