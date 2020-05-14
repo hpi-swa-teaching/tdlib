@@ -23,7 +23,9 @@ jobs:
       run: git clone https://github.com/tdlib/td.git
     - name: checkout 1.6.0 tag #edit here in case of new tdlib release
       working-directory: td
-      run: git checkout v1.6.0
+      run: git checkout v1.6.0   
+    - name: Create release dir
+      run: mkdir release
     - name: create build dir
       working-directory: td
       run: mkdir build
@@ -32,18 +34,13 @@ jobs:
       run: export CXXFLAGS="-stdlib=libc++"
     - name: run cc
       working-directory: td/build
-      run: CC=/usr/bin/clang-6.0 CXX=/usr/bin/clang++-6.0 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DTD_ENABLE_LTO=ON -DCMAKE_AR=/usr/bin/llvm-ar-6.0 -DCMAKE_NM=/usr/bin/llvm-nm-6.0 -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump-6.0 -DCMAKE_RANLIB=/usr/bin/llvm-ranlib-6.0 ..
+      run: CC=/usr/bin/clang-6.0 CXX=/usr/bin/clang++-6.0 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../../release -DTD_ENABLE_LTO=ON -DCMAKE_AR=/usr/bin/llvm-ar-6.0 -DCMAKE_NM=/usr/bin/llvm-nm-6.0 -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump-6.0 -DCMAKE_RANLIB=/usr/bin/llvm-ranlib-6.0 ..
     - name: cmake build
       working-directory: td/build
       run: cmake --build . --target install
-    - name: create release dir
-      run: mkdir release
-    - uses: montudor/action-zip@v0.1.0
-      with:
-          args: zip -qq -r ./release/vendor.zip ./td/build
     - uses: actions/upload-artifact@master
       with:
-          name: Mac OS Release
+          name: Ubuntu 18 x64 Release
           path: release
 
   
