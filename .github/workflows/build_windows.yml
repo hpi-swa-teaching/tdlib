@@ -1,0 +1,54 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag tdlib_1.6.0_win64
+    - name: Install Gperf
+      run: choco install gperf
+    - name: Install cmake
+      run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+    - name: Clone td
+      run: git clone https://github.com/tdlib/td.git
+    - name: Checkout 1.6.0 tag #edit here for new tdlib version
+      working-directory: td
+      run: git checkout v1.6.0
+    - name: Clone vcpkg
+      working-directory: td
+      run: git clone https://github.com/Microsoft/vcpkg.git
+    - name: Bootstrap vcpkg
+      working-directory: td/vcpkg
+      run: ./bootstrap-vcpkg.bat
+    - name: Install zlib, openssl
+      working-directory: td/vcpkg
+      run: ./vcpkg.exe install openssl:x64-windows zlib:x64-windows
+    - name: Remove intermediate build dir
+      working-directory: td
+      run: Remove-Item build -Force -Recurse -ErrorAction SilentlyContinue
+    - name: Create build dir
+      working-directory: td
+      run: mkdir build
+    - name: Cmake
+      working-directory: td/build
+      run: cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../vcpkg/scripts/buildsystems/vcpkg.cmake ..
+    - name: Cmake install
+      working-directory: td/build
+      run: cmake --build . --target install --config Release
+    - name: Create release
+      uses: actions/upload-artifact@master
+      with:
+          name: Win x64 Release
+          path: td/tdlib
+      
