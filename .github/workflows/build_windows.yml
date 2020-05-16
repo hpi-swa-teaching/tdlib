@@ -48,5 +48,5 @@ jobs:
       uses: actions/upload-artifact@master
       with:
           name: Win x64 Release
-          path: td/tdlib
+          path: td/tdlib/bin
       
