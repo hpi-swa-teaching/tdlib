@@ -20,9 +20,9 @@ jobs:
       run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
     - name: Clone td
       run: git clone https://github.com/tdlib/td.git
-    - name: Checkout 1.6.0 tag #edit here for new tdlib version
+    - name: Checkout 1.7.0 tag #edit here for new tdlib version
       working-directory: td
-      run: git checkout v1.6.0
+      run: git checkout v1.7.0
     - name: Clone vcpkg
       working-directory: td
       run: git clone https://github.com/Microsoft/vcpkg.git
