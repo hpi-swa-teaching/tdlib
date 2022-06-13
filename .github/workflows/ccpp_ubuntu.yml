@@ -21,9 +21,9 @@ jobs:
       run: sudo apt-get install make git zlib1g-dev libssl-dev gperf php cmake clang-6.0 libc++-dev libc++abi-dev
     - name: clone tdlib
       run: git clone https://github.com/tdlib/td.git
-    - name: checkout 1.7.0 tag #edit here in case of new tdlib release
+    - name: checkout 1.8.0 tag #edit here in case of new tdlib release
       working-directory: td
-      run: git checkout v1.7.0   
+      run: git checkout v1.8.0   
     - name: Create release dir
       run: mkdir release
     - name: create build dir

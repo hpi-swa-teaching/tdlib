@@ -19,9 +19,9 @@ jobs:
       run: brew install gperf cmake openssl
     - name: Clone tdlib
       run: git clone https://github.com/tdlib/td.git
-    - name: Checkout 1.7.0 tag
+    - name: Checkout 1.8.0 tag
       working-directory: td
-      run: git checkout v1.7.0
+      run: git checkout v1.8.0
     - name: Create release dir
       run: mkdir release
     - name: Create build dir
